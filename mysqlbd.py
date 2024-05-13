@@ -32,31 +32,54 @@ conn = create_connection_mysql_db(db_config["mysql"]["host"],
                                   "Test")
 try:
 
-    # создание таблицы
+    # создание итоговой таблицы
     cursor = conn.cursor()
-    #create_table_query = '''
-    #CREATE TABLE IF NOT EXISTS drons1 (
-    #id INT AUTO_INCREMENT, 
-    #name TEXT NOT NULL, 
-    #year_of_issue INT,  
-    #information TEXT,
-    #PRIMARY KEY (id)
-    #) ENGINE = InnoDB'''
-    #cursor.execute(create_table_query)
-    #conn.commit()
+    create_table_query = '''
+    CREATE TABLE IF NOT EXISTS drons1 (
+    id INT AUTO_INCREMENT, 
+    name TEXT NOT NULL, 
+    category TEXT,  
+    context TEXT,
+    PRIMARY KEY (id)
+    ) ENGINE = InnoDB'''
+    cursor.execute(create_table_query)
+    conn.commit()
 
-    # вставка данных в таблицу
+    # вставка данных в итоговую таблицу
     insert_drons1_table_query = '''
     INSERT INTO
-    drons1 (name, year_of_issue, information)     
+    drons1 (name, category, context)     
     VALUES
-    ('беспилотник 1', 2019, '...'),
-    ('беспилотник 2', 2022, '...'),
-    ('беспилотник 3', 2022, '...'),
-    ('беспилотник 4', 2023, '...');'''
+    ('беспилотник 1', 1, '...'),
+    ('беспилотник 2', 2, '...'),
+    ('беспилотник 3', 3, '...'),
+    ('беспилотник 4', 4, '...');'''  #все эти данные даёт нейронка
     cursor.execute(insert_drons1_table_query)
     conn.commit()
     
+    # создание таблицы c данными из парсера
+    cursor = conn.cursor()
+    create_table_query = '''
+    CREATE TABLE IF NOT EXISTS data (
+    id INT AUTO_INCREMENT,
+    text TEXT NOT NULL,
+    data_processing TEXT,
+    PRIMARY KEY (id)
+    ) ENGINE = InnoDB'''
+    cursor.execute(create_table_query)
+    conn.commit()
+
+    # вставка данных из парсера в таблицу для нейронки
+    insert_data_table_query = '''
+    INSERT INTO
+    data (text, data_processing)     
+    VALUES
+    ('...', 0),
+    ('...', 1),
+    ('...', 0);'''  #text даёт парсер, 0 - текст ещё не был обработан нейнонкой, 1 - уже обработан
+    cursor.execute(insert_data_table_query)
+    conn.commit()
+
     # редактирование записей
     update_drons1_query = '''
     UPDATE drons1 SET name = 'беспилотник 1' WHERE name = 'беспилотник 5';
