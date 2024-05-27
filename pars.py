@@ -76,7 +76,7 @@ def parse_website(url, domain):
 
 
 if __name__ == '__main__':
-    urli = 'https://аэронет2035.рф/'
+    urli = input('Введите ссылку на сайт:')
 
     get_dynamic_links(urli)
     print(a)
