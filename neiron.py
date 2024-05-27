@@ -38,6 +38,15 @@ def classify_text(text):
     probs = torch.softmax(outputs.logits, dim=1).squeeze().numpy()
     return probs  # Вероятности принадлежности к обоим классам для всего батча текстов
 
+def process_file(file_path):
+    dataset = CustomDataset(file_path)
+    data_loader = DataLoader(dataset, batch_size=8, shuffle=False)
+    results = []
+    for batch_texts in data_loader:
+        probs = classify_text(batch_texts)
+        results.extend(probs)
+    return results
+
 
 # Путь к файлу с данными
 file_path = 'test.txt'
